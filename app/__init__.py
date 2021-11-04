@@ -47,6 +47,7 @@ def create_app(config_name):
                         response = jsonify({
                             'id': todolist.id,
                             'name': todolist.name,
+                            'is_completed': todolist.is_completed,
                             'date_created': todolist.date_created,
                             'date_modified': todolist.date_modified,
                             'created_by': user_id
@@ -64,6 +65,7 @@ def create_app(config_name):
                         obj = {
                             'id': todolist.id,
                             'name': todolist.name,
+                            'is_completed': todolist.is_completed,
                             'date_created': todolist.date_created,
                             'date_modified': todolist.date_modified,
                             'created_by': todolist.created_by
@@ -95,16 +97,18 @@ def create_app(config_name):
 
                 if request.method == "DELETE":
                     todolist.delete()
-                    return {
-                        "message": "todolist {} deleted".format(todolist.id)
-                    }, 200
+                    return make_response({}), 204
                 elif request.method == 'PUT':
-                    name = str(request.data.get('name', ''))
-                    todolist.name = name
+                    if request.data.get('name'):
+                        name = str(request.data.get('name'))
+                        todolist.name = name
+                    is_completed = request.data.get('is_completed', False)
+                    todolist.is_completed = is_completed
                     todolist.save()
                     response = {
                         'id': todolist.id,
                         'name': todolist.name,
+                        'is_completed': todolist.is_completed,
                         'date_created': todolist.date_created,
                         'date_modified': todolist.date_modified,
                         'created_by': todolist.created_by
@@ -115,6 +119,7 @@ def create_app(config_name):
                     response = jsonify({
                         'id': todolist.id,
                         'name': todolist.name,
+                        'is_completed': todolist.is_completed,
                         'date_created': todolist.date_created,
                         'date_modified': todolist.date_modified,
                         'created_by': todolist.created_by

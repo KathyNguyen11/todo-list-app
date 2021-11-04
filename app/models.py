@@ -41,7 +41,7 @@ class User(db.Model):
         try:
             # set up a payload with an expiration time
             payload = {
-                'exp': datetime.utcnow() + timedelta(minutes=5),
+                'exp': datetime.utcnow() + timedelta(minutes=60),
                 'iat': datetime.utcnow(),
                 'sub': user_id
             }
@@ -78,6 +78,7 @@ class TodoList(db.Model):
     # define the columns of the table, starting with its primary key
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
+    is_completed = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_modified = db.Column(
         db.DateTime, default=db.func.current_timestamp(),
